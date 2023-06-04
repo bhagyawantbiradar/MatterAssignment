@@ -2,15 +2,19 @@ package com.bhagyawant.gameLib
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bhagyawant.gameLib.adapter.GridRecyclerAdapter
+import com.bhagyawant.gameLib.utils.NonScrollableGridLayoutManager
+import com.bhagyawant.gameLib.utils.SwipeGestureListener
 import kotlin.random.Random
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity(), SwipeGestureListener.OnSwipeListener {
 
     var ROW_AND_COLUMN_SIZE = 4
     lateinit var rvGrid : RecyclerView
@@ -21,6 +25,7 @@ class GameActivity : AppCompatActivity() {
     lateinit var btnRight : Button
     lateinit var grid2dArray: Array<IntArray>
     var finalScore = 0
+    private lateinit var gestureDetector: GestureDetector
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,8 +148,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun refreshGridAndScore() {
-        rvGrid.layoutManager = GridLayoutManager(this,grid2dArray[0].size)
-        rvGrid.adapter = GridRecyclerAdapter(grid2dArray)
+        rvGrid.layoutManager = NonScrollableGridLayoutManager(this,grid2dArray[0].size)
+        rvGrid.adapter = GridRecyclerAdapter(this,grid2dArray)
         tvScore.text = "Score : $finalScore"
     }
 
@@ -246,5 +251,27 @@ class GameActivity : AppCompatActivity() {
         btnBottom = findViewById(R.id.btn_bottom)
         btnLeft = findViewById(R.id.btn_left)
         btnRight = findViewById(R.id.btn_right)
+        gestureDetector = GestureDetector(this,SwipeGestureListener(this))
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+
+    override fun onSwipeLeft() {
+        moveLeftAndAdjust()
+    }
+
+    override fun onSwipeRight() {
+        moveRightAndAdjust()
+    }
+
+    override fun onSwipeUp() {
+        moveTopAndAdjust()
+    }
+
+    override fun onSwipeDown() {
+        moveBottomAndAdjust()
     }
 }

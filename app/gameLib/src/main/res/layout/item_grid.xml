@@ -3,7 +3,6 @@
     android:id="@+id/tv_item"
     android:layout_margin="1dp"
     android:textSize="24sp"
-    android:text="0"
     android:background="@android:color/darker_gray"
     android:gravity="center"
     android:layout_width="50dp"

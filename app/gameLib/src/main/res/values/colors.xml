@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="for_2">#FFC3BE</color>
+    <color name="for_4">#E46C62</color>
+    <color name="for_8">#F14A3C</color>
+    <color name="for_16">#5377A1</color>
+    <color name="for_32">#B388FF</color>
+    <color name="for_64">#EA80FC</color>
+    <color name="for_128">#FF80AB</color>
+    <color name="for_256">#C132A7</color>
+    <color name="for_512">#EA80FC</color>
+    <color name="for_1024">#60549E</color>
+    <color name="for_2048">#EC5043</color>
+    <color name="for_4096">#FF0000</color>
+    <color name="for_else">#717171</color>
+</resources>
