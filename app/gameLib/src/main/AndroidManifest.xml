@@ -3,6 +3,7 @@
 
     <application>
         <activity
+            android:screenOrientation="portrait"
             android:name=".view.GameActivity"
             android:exported="false">
             <meta-data
