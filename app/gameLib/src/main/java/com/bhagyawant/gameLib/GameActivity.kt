@@ -12,7 +12,7 @@ import kotlin.random.Random
 
 class GameActivity : AppCompatActivity() {
 
-    var ROW_AND_COLUMN_SIZE = 8;
+    var ROW_AND_COLUMN_SIZE = 4
     lateinit var rvGrid : RecyclerView
     lateinit var tvScore : TextView
     lateinit var btnTop : Button
@@ -30,7 +30,7 @@ class GameActivity : AppCompatActivity() {
 
         //Initializing all the cells with value 0 initially
         initializeGameValues()
-        refreshGrid()
+        refreshGridAndScore()
 
 
         btnLeft.setOnClickListener {
@@ -71,6 +71,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun moveBottomAndAdjust() {
+        var isMerged = false
         for(col in 0 until ROW_AND_COLUMN_SIZE){
             val temp = IntArray(ROW_AND_COLUMN_SIZE)
             var index = ROW_AND_COLUMN_SIZE-1
@@ -80,17 +81,32 @@ class GameActivity : AppCompatActivity() {
                     index--
                 }
             }
-
             for(row in 0 until ROW_AND_COLUMN_SIZE){
                 grid2dArray[row][col] = temp[row]
             }
         }
-        putRandom()
-        refreshGrid()
+
+        for(col in 0 until ROW_AND_COLUMN_SIZE){
+            for(row in ROW_AND_COLUMN_SIZE-1 downTo 1){
+                if(grid2dArray[row][col]!=0 && grid2dArray[row][col]==grid2dArray[row-1][col]){
+                    grid2dArray[row][col] *= 2
+                    finalScore += grid2dArray[row][col]
+                    grid2dArray[row-1][col] = 0
+                    isMerged = true
+                }
+            }
+        }
+
+        if(isMerged){
+            moveBottomAndAdjust()
+        }else{
+            putRandom()
+            refreshGridAndScore()
+        }
     }
 
     private fun moveTopAndAdjust() {
-
+        var isMerged = false
         for(col in 0 until ROW_AND_COLUMN_SIZE){
             val temp = IntArray(ROW_AND_COLUMN_SIZE)
             var index = 0
@@ -106,16 +122,34 @@ class GameActivity : AppCompatActivity() {
             }
 
         }
-        putRandom()
-        refreshGrid()
+
+        for(col in 0 until ROW_AND_COLUMN_SIZE){
+            for(row in 0 until ROW_AND_COLUMN_SIZE-1){
+                if(grid2dArray[row][col]!=0 && grid2dArray[row][col]==grid2dArray[row+1][col]){
+                    grid2dArray[row][col] *= 2
+                    finalScore += grid2dArray[row][col]
+                    grid2dArray[row+1][col] = 0
+                    isMerged = true
+                }
+            }
+        }
+
+        if(isMerged){
+            moveTopAndAdjust()
+        }else{
+            putRandom()
+            refreshGridAndScore()
+        }
     }
 
-    private fun refreshGrid() {
+    private fun refreshGridAndScore() {
         rvGrid.layoutManager = GridLayoutManager(this,grid2dArray[0].size)
         rvGrid.adapter = GridRecyclerAdapter(grid2dArray)
+        tvScore.text = "Score : $finalScore"
     }
 
     private fun moveLeftAndAdjust() {
+        var isMerged = false
         for(row in 0 until ROW_AND_COLUMN_SIZE){
             val temp = IntArray(ROW_AND_COLUMN_SIZE)
             var index = 0
@@ -127,28 +161,57 @@ class GameActivity : AppCompatActivity() {
             }
             temp.copyInto(grid2dArray[row])
         }
-        putRandom()
-        refreshGrid()
+
+        for(row in 0 until ROW_AND_COLUMN_SIZE){
+            for(col in 0 until ROW_AND_COLUMN_SIZE-1){
+                if(grid2dArray[row][col]!=0 && grid2dArray[row][col]==grid2dArray[row][col+1]){
+                    grid2dArray[row][col] *= 2
+                    finalScore += grid2dArray[row][col]
+                    grid2dArray[row][col+1] = 0
+                    isMerged = true
+                }
+            }
+        }
+
+        if(isMerged){
+            moveLeftAndAdjust()
+        }else{
+            putRandom()
+            refreshGridAndScore()
+        }
     }
 
     private fun moveRightAndAdjust(){
-
+        var isMerged = false
         for(row in 0 until ROW_AND_COLUMN_SIZE){
             val temp = IntArray(ROW_AND_COLUMN_SIZE)
             var index = ROW_AND_COLUMN_SIZE-1
-
             for(col in ROW_AND_COLUMN_SIZE-1 downTo 0){
-
                 if(grid2dArray[row][col]!=0){
                     temp[index] = grid2dArray[row][col]
                     index--
                 }
             }
-
             temp.copyInto(grid2dArray[row])
         }
-        putRandom()
-        refreshGrid()
+
+        for(row in 0 until ROW_AND_COLUMN_SIZE){
+            for(col in ROW_AND_COLUMN_SIZE-1 downTo 1){
+                if(grid2dArray[row][col]!=0 && grid2dArray[row][col]==grid2dArray[row][col-1]){
+                    grid2dArray[row][col]*=2
+                    finalScore += grid2dArray[row][col]
+                    grid2dArray[row][col-1]=0
+                    isMerged = true
+                }
+            }
+        }
+
+        if(isMerged){
+            moveRightAndAdjust()
+        }else{
+            putRandom()
+            refreshGridAndScore()
+        }
     }
 
     private fun set2AtRandomGrid() {
