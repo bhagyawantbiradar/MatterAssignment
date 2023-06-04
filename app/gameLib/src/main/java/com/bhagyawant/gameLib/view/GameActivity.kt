@@ -1,4 +1,4 @@
-package com.bhagyawant.gameLib
+package com.bhagyawant.gameLib.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,15 +7,18 @@ import android.view.MotionEvent
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.bhagyawant.gameLib.R
 import com.bhagyawant.gameLib.adapter.GridRecyclerAdapter
 import com.bhagyawant.gameLib.utils.NonScrollableGridLayoutManager
 import com.bhagyawant.gameLib.utils.SwipeGestureListener
+import com.bhagyawant.gameLib.view_model.GameViewModel
 import kotlin.random.Random
 
 class GameActivity : AppCompatActivity(), SwipeGestureListener.OnSwipeListener {
 
+    lateinit var gameViewModel: GameViewModel
     var ROW_AND_COLUMN_SIZE = 4
     lateinit var rvGrid : RecyclerView
     lateinit var tvScore : TextView
@@ -31,6 +34,7 @@ class GameActivity : AppCompatActivity(), SwipeGestureListener.OnSwipeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        gameViewModel = ViewModelProvider(this).get(GameViewModel::class.java)
         initViews()
 
         //Initializing all the cells with value 0 initially

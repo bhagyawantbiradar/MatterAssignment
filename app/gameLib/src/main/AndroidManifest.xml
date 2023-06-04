@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".GameActivity"
+            android:name=".view.GameActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
